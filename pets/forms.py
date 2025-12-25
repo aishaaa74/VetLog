@@ -13,6 +13,7 @@ class PetForm(forms.ModelForm):
                 ('Кошка', 'Кошка'),
                 ('Хомяк', 'Хомяк'),
                 ('Птица', 'Птица'),
+                ('Змея', 'Змея')
                 ('Другое', 'Другое'),
             ]),
             'breed': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Порода (необязательно)'}),
