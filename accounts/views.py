@@ -41,5 +41,5 @@ def user_login(request):
 @login_required
 def user_logout(request):
     logout(request)
-    messages.info(request, 'Вы успешно вышли из аккаунта')
+    messages.info(request, 'Вы успешно вышли из аккаунта!')
     return redirect('login')
