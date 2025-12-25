@@ -24,7 +24,7 @@
 
     {% if pet.photo %}
         <div class="photo">
-            <img src="{{ request.build_absolute_uri }}{{ pet.photo.url }}" alt="{{ pet.name }}">
+            <img src="{{ request.build_absolute_uri }}{{ pet.photo.url}}" alt="{{ pet.name }}">
         </div>
     {% endif %}
 
