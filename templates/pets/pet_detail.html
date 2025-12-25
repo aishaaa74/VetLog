@@ -1,0 +1,51 @@
+{% extends 'base/base.html' %}
+{% block title %}{{ pet.name }} — VetLog{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card shadow">
+            {% if pet.photo %}
+                <img src="{{ pet.photo.url }}" class="card-img-top" style="height: 300px; object-fit: cover;">
+            {% else %}
+                <div class="bg-gradient text-white text-center py-5" style="height: 300px;">
+                    <i class="bi bi-paw display-1"></i>
+                </div>
+            {% endif %}
+            <div class="card-body text-center">
+                <h2 class="card-title">{{ pet.name }}</h2>
+                <p class="lead text-primary">{{ pet.age }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4><i class="bi bi-info-circle"></i> Информация о питомце</h4>
+                <div>
+                    <a href="{% url 'pet_update' pet.pk %}" class="btn btn-outline-primary btn-sm me-2">Изменить</a>
+                    <a href="{% url 'health:pet_pdf' pet.id %}" class="btn btn-outline-primary btn-sm me-2">Экспорт</a>
+                     <a href="{% url 'pet_delete' pet.pk %}" class="btn btn-outline-danger btn-sm me-2">Удалить</a>
+
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <strong>Вид:</strong> {{ pet.species }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong>Порода:</strong> {{ pet.breed|default:"Не указана" }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong>Пол:</strong> {{ pet.get_gender_display }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong>Вес:</strong> {{ pet.weight|floatformat:1 }} кг
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

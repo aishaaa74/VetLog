@@ -1,0 +1,92 @@
+{% extends "base\base.html" %}
+{% load static %}
+
+{% block title %}
+    {% if form.instance.pk %}Редактировать{% else %}Добавить{% endif %} прививку
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-primary text-white text-center py-4 rounded-top-4">
+                    <h3 class="mb-0">
+                        <i class="bi bi-syringe"></i>
+                        {% if form.instance.pk %}
+                            Редактировать прививку
+                        {% else %}
+                            Новая прививка
+                        {% endif %}
+                    </h3>
+                </div>
+                
+                <div class="card-body p-4">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Питомец</label>
+                            {{ form.pet }}
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Вакцина</label>
+                            {{ form.vaccine }}
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Дата прививки</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+                                {{ form.date_given }}
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Следующая прививка (по желанию)</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-calendar-check"></i></span>
+                                {{ form.next_due_date }}
+                            </div>
+                            <div class="form-text text-muted">
+                                Оставьте пустым — будет рассчитано автоматически (+1 год)
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-3 mt-5">
+                            <button type="submit" class="btn btn-success btn-lg rounded-pill">
+                                <i class="bi bi-check-lg"></i>
+                                {% if form.instance.pk %}Сохранить изменения{% else %}Добавить прививку{% endif %}
+                            </button>
+                            <a href="{% url 'health:list' %}" class="btn btn-outline-secondary btn-lg rounded-pill">
+                                <i class="bi bi-arrow-left"></i> Назад к списку
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Подключаем Bootstrap Datepicker (красивый календарь) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $('.datepicker').datepicker({
+            format: 'dd.mm.yyyy',
+            todayHighlight: true,
+            autoclose: true,
+            language: 'ru'
+        });
+    });
+</script>
+
+<style>
+    .card { max-width: 100%; }
+    .form-select, .form-control { border-radius: 12px; padding: 12px; }
+    input[type="date"] { height: 50px; }
+</style>
+{% endblock %}

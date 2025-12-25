@@ -1,0 +1,80 @@
+{% extends 'base/base.html' %}
+{% block title %}Главная — VetLog{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 mb-4">
+        <h1>Привет, {{ user.first_name|default:user.username }}!</h1>
+        <p class="text-muted">Вот что происходит с вашими питомцами сегодня</p>
+    </div>
+</div>
+
+<!-- Карточки питомцев -->
+{% if pets %}
+<div class="row mb-5">
+    {% for pet in pets %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+            {% if pet.photo %}
+                <img src="{{ pet.photo.url }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+            {% else %}
+                <div class="bg-light border-bottom text-center py-5">
+                    <i class="bi bi-paw display-1 text-muted"></i>
+                </div>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ pet.name }}</h5>
+                <p class="card-text">
+                    {{ pet.species }} • {{ pet.breed|default:"Не указана" }}<br>
+                    {{ pet.get_gender_display }}
+                </p>
+              
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info">
+    <h4>У вас пока нет питомцев</h4>
+    <p>Добавьте своего первого друга, чтобы начать вести учёт здоровья!</p>
+    <a href="{% url 'pet_list' %}" class="btn btn-primary">Добавить питомца</a>
+</div>
+{% endif %}
+
+<!-- Ближайшие события -->
+<div class="row">
+    <div class="col-12">
+        <h3><i class="bi bi-bell"></i> Напоминания</h3>
+
+        {% if overdue_vaccinations %}
+            <div class="alert alert-danger">
+                <strong>Просрочено!</strong>
+                {% for v in overdue_vaccinations %}
+                    <div>• {{ v.pet.name }} — {{ v.vaccine.short_name }} (должно быть до {{ v.next_due_date|date:"d.m.Y" }})</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if upcoming_vaccinations %}
+            <div class="card">
+                <div class="card-body">
+                    <h5>Скоро нужно сделать:</h5>
+                    {% for v in upcoming_vaccinations %}
+                        <div class="d-flex justify-content-between border-bottom py-2">
+                            <span>{{ v.pet.name }} — {{ v.vaccine.short_name }}</span>
+                            <strong class="text-primary">{{ v.next_due_date|date:"d.m.Y" }}</strong>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            {% if not overdue_vaccinations %}
+                <div class="alert alert-success">
+                    <i class="bi bi-check-circle"></i> Все прививки в порядке! Молодец!
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

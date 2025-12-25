@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Ветеринарный паспорт — {{ pet.name }}</title>
+    <style>
+        body { font-family: DejaVu Sans, sans-serif; margin: 2cm; }
+        .header { text-align: center; border-bottom: 3px solid #007bff; padding-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #f8f9fa; }
+        .photo { width: 150px; height: 150px; object-fit: cover; border-radius: 50%; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Ветеринарный паспорт</h1>
+        <h2>{{ pet.name }}</h2>
+        <img src="{{ pet.photo.url }}" class="photo" alt="{{ pet.name }}">
+        <p><strong>Владелец:</strong> {{ pet.owner.get_full_name|default:pet.owner.username }}</p>
+        <p><strong>Вид:</strong> {{ pet.species }} | <strong>Порода:</strong> {{ pet.breed|default:"—" }} | <strong>Пол:</strong> {{ pet.get_gender_display }} | <strong>Возраст:</strong> {{ pet.age }}</p>
+    </div>
+
+    <h2>Прививки</h2>
+    <table>
+        <tr><th>Вакцина</th><th>Дата</th><th>Следующая</th></tr>
+        {% for v in vaccinations %}
+        <tr><td>{{ v.vaccine.short_name }}</td><td>{{ v.date_given }}</td><td>{{ v.next_due_date|default:"—" }}</td></tr>
+        {% endfor %}
+    </table>
+
+    <h2>Обработки от паразитов</h2>
+    <table>
+        <tr><th>Тип</th><th>Препарат</th><th>Дата</th><th>Следующая</th></tr>
+        {% for t in treatments %}
+        <tr><td>{{ t.get_treatment_type_display }}</td><td>{{ t.drug }}</td><td>{{ t.date_given }}</td><td>{{ t.next_due_date|default:"—" }}</td></tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

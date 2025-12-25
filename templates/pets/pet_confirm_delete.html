@@ -1,0 +1,25 @@
+{% extends 'base/base.html' %}
+{% block title %}Удалить {{ pet.name }}? — VetLog{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-danger shadow">
+            <div class="card-header bg-danger text-white text-center">
+                <h4><i class="bi bi-exclamation-triangle"></i> Удалить питомца?</h4>
+            </div>
+            <div class="card-body text-center py-5">
+                <h2>{{ pet.name }}</h2>
+                <p class="lead text-muted">Это действие нельзя отменить!</p>
+                <p class="text-danger">Все данные о прививках и визитах тоже будут удалены.</p>
+                
+                <form method="post" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-lg me-3">Да, удалить</button>
+                </form>
+                <a href="{% url 'pet_list' %}" class="btn btn-secondary btn-lg">Отмена</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

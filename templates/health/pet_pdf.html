@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style type="text/css">
+        body { font-family: DejaVu Sans, Arial, sans-serif; margin: 40px; font-size: 14px; }
+        h1, h2 { color: #2c3e50; text-align: center; margin: 0; }
+        .header { background: #3498db; color: white; padding: 20px; text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin: 25px 0; font-size: 13px; }
+        th { background: #f4f4f4; padding: 12px; text-align: left; border: 1px solid #ddd; }
+        td { padding: 10px; border: 1px solid #ddd; }
+        .photo { text-align: center; margin: 30px 0; }
+        .photo img { width: 180px; height: 180px; object-fit: cover; border-radius: 10px; border: 4px solid #ddd; }
+        .footer { margin-top: 60px; text-align: center; color: #95a5a6; font-size: 12px; }
+        .overdue { color: red; font-weight: bold; }
+        .ok { color: green; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ВЕТЕРИНАРНАЯ КАРТА</h1>
+        <h2>{{ pet.name }}</h2>
+    </div>
+
+    {% if pet.photo %}
+        <div class="photo">
+            <img src="{{ request.build_absolute_uri }}{{ pet.photo.url }}" alt="{{ pet.name }}">
+        </div>
+    {% endif %}
+
+    <p><strong>Вид:</strong> {{ pet.species }}  <strong>Порода:</strong> {{ pet.breed }}  <strong>Пол:</strong> {{ pet.get_gender_display }}</p>
+    <p><strong>Дата рождения:</strong> {{ pet.birth_date|date:"d.m.Y"|default:"не указана" }} 
+       {% if pet.birth_date %}({{ pet.age }}){% endif %}</p>
+
+    <h2 style="margin-top:40px; color:#2c3e50">Прививки</h2>
+    {% if vaccinations %}
+    <table>
+        <tr>
+            <th>Вакцина</th>
+            <th>Дата прививки</th>
+            <th>Следующая</th>
+            <th>Статус</th>
+        </tr>
+        {% for v in vaccinations %}
+        <tr>
+            <td>{{ v.vaccine.short_name }}</td>
+            <td>{{ v.date_given|date:"d.m.Y" }}</td>
+            <td>{{ v.next_due_date|date:"d.m.Y"|default:"—" }}</td>
+            <td>
+                {% if v.is_overdue %}
+                    <span class="overdue">ПРОСРОЧЕНО!</span>
+                {% else %}
+                    <span class="ok">Ок</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+        <p>Прививок пока нет</p>
+    {% endif %}
+
+    <div class="footer">
+        Сформировано {{ today|date:"d.m.Y" }} • VetLog
+    </div>
+</body>
+</html>

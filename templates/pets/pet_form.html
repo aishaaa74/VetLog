@@ -1,0 +1,54 @@
+{% extends 'base/base.html' %}
+{% block title %}{{ title }} — VetLog{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">{% if 'Добавить' in title %}
+    <i class="bi bi-plus-circle"></i>
+{% else %}
+    <i class="bi bi-pencil"></i>
+{% endif %}{{ title }}</h4>
+            </div>
+            <div class="card-body p-4">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            {{ form.name }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form.species }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            {{ form.breed }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form.gender }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            {{ form.birth_date }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form.weight }}
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        {{ form.photo }}
+                    </div>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'pet_list' %}" class="btn btn-secondary me-md-2">Отмена</a>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

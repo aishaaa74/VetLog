@@ -1,0 +1,51 @@
+{% extends 'base/base.html' %}
+{% block title %}Мои прививки{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>История прививок</h1>
+    
+    </div>
+
+  
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <a href="{% url 'health:create' %}" class="btn btn-success btn-lg">
+            <i class="bi bi-plus-circle"></i> Добавить прививку
+        </a>
+    </div>
+
+    {% if vaccinations %}
+        {% for v in vaccinations %}
+        <div class="card mb-3 shadow-sm">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-3"><strong>{{ v.pet.name }}</strong></div>
+                    <div class="col-md-4">{{ v.vaccine.short_name }}</div>
+                    <div class="col-md-3">Прививка: <strong>{{ v.date_given|date:"d.m.Y" }}</strong></div>
+                    <div class="col-md-2">
+                      Далее: 
+                      {% if v.next_due_date %}
+                        <strong class="{% if v.is_overdue %}text-danger{% else %}text-success{% endif %}">
+                         {{ v.next_due_date|date:"d.m.Y" }}
+                         </strong>
+                     {% else %}
+            <span class="text-muted">—</span>
+        {% endif %}
+    </div>
+</div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="text-center py-5">
+            <h3 class="text-muted">Пока нет записей о прививках</h3>
+            <p class="lead">Добавьте первую прививку прямо сейчас!</p>
+            <a href="{% url 'health:create' %}" class="btn btn-success btn-lg">
+                + Добавить первую прививку
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
